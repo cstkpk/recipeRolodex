@@ -35,11 +35,11 @@ func configureAPI(api *operations.RecipeRolodexAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
-	if api.ReadyGetReadyHandler == nil {
-		api.ReadyGetReadyHandler = ready.GetReadyHandlerFunc(func(params ready.GetReadyParams) middleware.Responder {
-			return middleware.NotImplemented("operation ready.GetReady has not yet been implemented")
-		})
-	}
+	// GET /ready
+	api.ReadyGetReadyHandler = ready.GetReadyHandlerFunc(func(params ready.GetReadyParams) middleware.Responder {
+		return ready.Get(params)
+	})
+
 	if api.RecipesGetRecipesHandler == nil {
 		api.RecipesGetRecipesHandler = recipes.GetRecipesHandlerFunc(func(params recipes.GetRecipesParams) middleware.Responder {
 			return middleware.NotImplemented("operation recipes.GetRecipes has not yet been implemented")
