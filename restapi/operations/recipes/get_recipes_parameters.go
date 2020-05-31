@@ -11,15 +11,31 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
-
-	strfmt "github.com/go-openapi/strfmt"
+	"github.com/go-openapi/strfmt"
 )
 
 // NewGetRecipesParams creates a new GetRecipesParams object
-// no default values defined in spec.
+// with the default values initialized.
 func NewGetRecipesParams() GetRecipesParams {
 
-	return GetRecipesParams{}
+	var (
+		// initialize parameters with default values
+
+		ingredient1Default = string("")
+		ingredient2Default = string("")
+		ingredient3Default = string("")
+		seasonDefault      = string("")
+	)
+
+	return GetRecipesParams{
+		Ingredient1: &ingredient1Default,
+
+		Ingredient2: &ingredient2Default,
+
+		Ingredient3: &ingredient3Default,
+
+		Season: &seasonDefault,
+	}
 }
 
 // GetRecipesParams contains all the bound params for the get recipes operation
@@ -33,18 +49,22 @@ type GetRecipesParams struct {
 
 	/*an ingredient to filter recipes by
 	  In: query
+	  Default: ""
 	*/
 	Ingredient1 *string
 	/*an ingredient to filter recipes by
 	  In: query
+	  Default: ""
 	*/
 	Ingredient2 *string
 	/*an ingredient to filter recipes by
 	  In: query
+	  Default: ""
 	*/
 	Ingredient3 *string
 	/*a season to filter recipes by
 	  In: query
+	  Default: ""
 	*/
 	Season *string
 }
@@ -96,6 +116,7 @@ func (o *GetRecipesParams) bindIngredient1(rawData []string, hasKey bool, format
 	// Required: false
 	// AllowEmptyValue: false
 	if raw == "" { // empty values pass all other validations
+		// Default values have been previously initialized by NewGetRecipesParams()
 		return nil
 	}
 
@@ -114,6 +135,7 @@ func (o *GetRecipesParams) bindIngredient2(rawData []string, hasKey bool, format
 	// Required: false
 	// AllowEmptyValue: false
 	if raw == "" { // empty values pass all other validations
+		// Default values have been previously initialized by NewGetRecipesParams()
 		return nil
 	}
 
@@ -132,6 +154,7 @@ func (o *GetRecipesParams) bindIngredient3(rawData []string, hasKey bool, format
 	// Required: false
 	// AllowEmptyValue: false
 	if raw == "" { // empty values pass all other validations
+		// Default values have been previously initialized by NewGetRecipesParams()
 		return nil
 	}
 
@@ -150,6 +173,7 @@ func (o *GetRecipesParams) bindSeason(rawData []string, hasKey bool, formats str
 	// Required: false
 	// AllowEmptyValue: false
 	if raw == "" { // empty values pass all other validations
+		// Default values have been previously initialized by NewGetRecipesParams()
 		return nil
 	}
 

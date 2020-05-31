@@ -8,7 +8,7 @@ package recipes
 import (
 	"net/http"
 
-	middleware "github.com/go-openapi/runtime/middleware"
+	"github.com/go-openapi/runtime/middleware"
 )
 
 // GetRecipesHandlerFunc turns a function with the right signature into a get recipes handler

@@ -40,11 +40,10 @@ func configureAPI(api *operations.RecipeRolodexAPI) http.Handler {
 		return ready.Get(params)
 	})
 
-	if api.RecipesGetRecipesHandler == nil {
-		api.RecipesGetRecipesHandler = recipes.GetRecipesHandlerFunc(func(params recipes.GetRecipesParams) middleware.Responder {
-			return middleware.NotImplemented("operation recipes.GetRecipes has not yet been implemented")
-		})
-	}
+	// GET /recipes
+	api.RecipesGetRecipesHandler = recipes.GetRecipesHandlerFunc(func(params recipes.GetRecipesParams) middleware.Responder {
+		return recipes.Get(params)
+	})
 
 	api.PreServerShutdown = func() {}
 

@@ -73,24 +73,28 @@ func init() {
         "parameters": [
           {
             "type": "string",
+            "default": "",
             "description": "an ingredient to filter recipes by",
             "name": "ingredient1",
             "in": "query"
           },
           {
             "type": "string",
+            "default": "",
             "description": "an ingredient to filter recipes by",
             "name": "ingredient2",
             "in": "query"
           },
           {
             "type": "string",
+            "default": "",
             "description": "an ingredient to filter recipes by",
             "name": "ingredient3",
             "in": "query"
           },
           {
             "type": "string",
+            "default": "",
             "description": "a season to filter recipes by",
             "name": "season",
             "in": "query"
@@ -228,24 +232,28 @@ func init() {
         "parameters": [
           {
             "type": "string",
+            "default": "",
             "description": "an ingredient to filter recipes by",
             "name": "ingredient1",
             "in": "query"
           },
           {
             "type": "string",
+            "default": "",
             "description": "an ingredient to filter recipes by",
             "name": "ingredient2",
             "in": "query"
           },
           {
             "type": "string",
+            "default": "",
             "description": "an ingredient to filter recipes by",
             "name": "ingredient3",
             "in": "query"
           },
           {
             "type": "string",
+            "default": "",
             "description": "a season to filter recipes by",
             "name": "season",
             "in": "query"

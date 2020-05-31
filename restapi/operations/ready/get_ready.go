@@ -8,7 +8,7 @@ package ready
 import (
 	"net/http"
 
-	middleware "github.com/go-openapi/runtime/middleware"
+	"github.com/go-openapi/runtime/middleware"
 )
 
 // GetReadyHandlerFunc turns a function with the right signature into a get ready handler

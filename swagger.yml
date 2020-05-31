@@ -1,5 +1,5 @@
 ---
-swagger: '2.0'
+swagger: "2.0"
 consumes:
   - application/json
 produces:
@@ -33,7 +33,7 @@ paths:
             $ref: "#/definitions/ReturnCode"
   /recipes:
     get:
-      tags: 
+      tags:
         - recipes
       summary: get a list of recipes
       description: |
@@ -44,21 +44,25 @@ paths:
           in: query
           required: false
           type: string
+          default: ""
         - name: ingredient2
           description: an ingredient to filter recipes by
           in: query
           required: false
           type: string
+          default: ""
         - name: ingredient3
           description: an ingredient to filter recipes by
           in: query
           required: false
           type: string
+          default: ""
         - name: season
           description: a season to filter recipes by
           in: query
           required: false
           type: string
+          default: ""
       responses:
         200:
           description: successful
@@ -76,7 +80,6 @@ paths:
           description: unexpected error
           schema:
             $ref: "#/definitions/ReturnCode"
-
 
 definitions:
   ReturnCode:

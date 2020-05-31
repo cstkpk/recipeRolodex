@@ -8,7 +8,7 @@ import (
 
 	"github.com/cstkpk/recipeRolodex/restapi"
 	"github.com/cstkpk/recipeRolodex/restapi/operations"
-	loads "github.com/go-openapi/loads"
+	"github.com/go-openapi/loads"
 	flags "github.com/jessevdk/go-flags"
 )
 

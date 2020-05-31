@@ -39,8 +39,11 @@ func NewRecipeRolodexAPI(spec *loads.Document) *RecipeRolodexAPI {
 		BasicAuthenticator:  security.BasicAuth,
 		APIKeyAuthenticator: security.APIKeyAuth,
 		BearerAuthenticator: security.BearerAuth,
-		JSONConsumer:        runtime.JSONConsumer(),
-		JSONProducer:        runtime.JSONProducer(),
+
+		JSONConsumer: runtime.JSONConsumer(),
+
+		JSONProducer: runtime.JSONProducer(),
+
 		ReadyGetReadyHandler: ready.GetReadyHandlerFunc(func(params ready.GetReadyParams) middleware.Responder {
 			return middleware.NotImplemented("operation ready.GetReady has not yet been implemented")
 		}),
@@ -71,9 +74,11 @@ type RecipeRolodexAPI struct {
 	// BearerAuthenticator generates a runtime.Authenticator from the supplied bearer token auth function.
 	// It has a default implementation in the security package, however you can replace it for your particular usage.
 	BearerAuthenticator func(string, security.ScopedTokenAuthentication) runtime.Authenticator
+
 	// JSONConsumer registers a consumer for the following mime types:
 	//   - application/json
 	JSONConsumer runtime.Consumer
+
 	// JSONProducer registers a producer for the following mime types:
 	//   - application/json
 	JSONProducer runtime.Producer
@@ -149,11 +154,10 @@ func (o *RecipeRolodexAPI) Validate() error {
 	}
 
 	if o.ReadyGetReadyHandler == nil {
-		unregistered = append(unregistered, "Ready.GetReadyHandler")
+		unregistered = append(unregistered, "ready.GetReadyHandler")
 	}
-
 	if o.RecipesGetRecipesHandler == nil {
-		unregistered = append(unregistered, "Recipes.GetRecipesHandler")
+		unregistered = append(unregistered, "recipes.GetRecipesHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -170,16 +174,12 @@ func (o *RecipeRolodexAPI) ServeErrorFor(operationID string) func(http.ResponseW
 
 // AuthenticatorsFor gets the authenticators for the specified security schemes
 func (o *RecipeRolodexAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) map[string]runtime.Authenticator {
-
 	return nil
-
 }
 
 // Authorizer returns the registered authorizer
 func (o *RecipeRolodexAPI) Authorizer() runtime.Authorizer {
-
 	return nil
-
 }
 
 // ConsumersFor gets the consumers for the specified media types.
@@ -243,7 +243,6 @@ func (o *RecipeRolodexAPI) Context() *middleware.Context {
 
 func (o *RecipeRolodexAPI) initHandlerCache() {
 	o.Context() // don't care about the result, just that the initialization happened
-
 	if o.handlers == nil {
 		o.handlers = make(map[string]map[string]http.Handler)
 	}
@@ -252,12 +251,10 @@ func (o *RecipeRolodexAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/ready"] = ready.NewGetReady(o.context, o.ReadyGetReadyHandler)
-
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/recipes"] = recipes.NewGetRecipes(o.context, o.RecipesGetRecipesHandler)
-
 }
 
 // Serve creates a http handler to serve the API over HTTP
@@ -286,4 +283,16 @@ func (o *RecipeRolodexAPI) RegisterConsumer(mediaType string, consumer runtime.C
 // RegisterProducer allows you to add (or override) a producer for a media type.
 func (o *RecipeRolodexAPI) RegisterProducer(mediaType string, producer runtime.Producer) {
 	o.customProducers[mediaType] = producer
+}
+
+// AddMiddlewareFor adds a http middleware to existing handler
+func (o *RecipeRolodexAPI) AddMiddlewareFor(method, path string, builder middleware.Builder) {
+	um := strings.ToUpper(method)
+	if path == "/" {
+		path = ""
+	}
+	o.Init()
+	if h, ok := o.handlers[um][path]; ok {
+		o.handlers[method][path] = builder(h)
+	}
 }
