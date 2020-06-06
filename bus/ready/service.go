@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/cstkpk/recipeRolodex/constant"
 	"github.com/cstkpk/recipeRolodex/mysql"
 )
 
@@ -15,7 +16,8 @@ func GetReady(ctx context.Context) error {
 	_, err := mysql.Connect(ctx)
 	if err != nil {
 		fmt.Println("Error:", err.Error())
-		return err
+		return constant.Errors.DbConnectionFailure
 	}
+	fmt.Println("Info: Successfully connected to the database")
 	return nil
 }

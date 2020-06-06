@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/cstkpk/recipeRolodex/constant"
 	"github.com/cstkpk/recipeRolodex/models"
 	"github.com/cstkpk/recipeRolodex/mysql"
 )
@@ -13,7 +14,7 @@ func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*mode
 	db, err := mysql.Connect(ctx)
 	if err != nil {
 		fmt.Println("Error:", err.Error())
-		return nil, err
+		return nil, constant.Errors.DbConnectionFailure
 	}
 
 	// First find IDs associated with requested ingredients
@@ -22,7 +23,7 @@ func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*mode
 	rows, err := db.QueryContext(ctx, ingredientQuery, ing1, ing2, ing3)
 	if err != nil {
 		fmt.Println("Error:", err.Error())
-		return nil, err
+		return nil, constant.Errors.DbQueryFailure
 	}
 	defer rows.Close()
 
@@ -34,7 +35,7 @@ func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*mode
 		)
 		if err != nil {
 			fmt.Println("Error:", err.Error())
-			return nil, err
+			return nil, constant.Errors.InternalService
 		}
 		ingredientIDs = append(ingredientIDs, ingredientID)
 	}
@@ -58,7 +59,7 @@ func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*mode
 	rows, err = db.QueryContext(ctx, linkQuery, args...)
 	if err != nil {
 		fmt.Println("Error:", err.Error())
-		return nil, err
+		return nil, constant.Errors.DbQueryFailure
 	}
 	defer rows.Close()
 
@@ -70,14 +71,14 @@ func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*mode
 		)
 		if err != nil {
 			fmt.Println("Error:", err.Error())
-			return nil, err
+			return nil, constant.Errors.InternalService
 		}
 		recipeIDs = append(recipeIDs, recipeID)
 	}
 
 	if len(recipeIDs) == 0 {
-		fmt.Println("Error: No recipes found that match search criteria")
-		return nil, nil // TODO: Add error handling here
+		fmt.Println("Error:", constant.Errors.NoRecipesFound.Error())
+		return nil, constant.Errors.NoRecipesFound
 	}
 
 	// Then get recipe details associated with recipeIDs (and season if included in query)
@@ -105,7 +106,7 @@ func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*mode
 	rows, err = db.QueryContext(ctx, query, args2...)
 	if err != nil {
 		fmt.Println("Error:", err.Error())
-		return nil, err
+		return nil, constant.Errors.DbQueryFailure
 	}
 	defer rows.Close()
 
@@ -125,8 +126,8 @@ func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*mode
 		recipeList = append(recipeList, &recipe)
 	}
 	if recipeList == nil {
-		fmt.Println("Error: Recipe list is empty")
-		return nil, nil // TODO: Add error handling here
+		fmt.Println("Error: recipeList is empty")
+		return nil, constant.Errors.InternalService
 	}
 
 	var recipes *models.Recipes
