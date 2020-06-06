@@ -63,6 +63,56 @@ func init() {
         }
       }
     },
+    "/recipe": {
+      "get": {
+        "description": "Retrieve details about a recipe given a recipeID\n",
+        "tags": [
+          "recipe"
+        ],
+        "summary": "get details about a recipe",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "a recipe ID",
+            "name": "recipeID",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful",
+            "schema": {
+              "$ref": "#/definitions/Recipe"
+            }
+          },
+          "400": {
+            "description": "bad requests",
+            "schema": {
+              "$ref": "#/definitions/ReturnCode"
+            }
+          },
+          "404": {
+            "description": "not found",
+            "schema": {
+              "$ref": "#/definitions/ReturnCode"
+            }
+          },
+          "500": {
+            "description": "internal service error",
+            "schema": {
+              "$ref": "#/definitions/ReturnCode"
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ReturnCode"
+            }
+          }
+        }
+      }
+    },
     "/recipes": {
       "get": {
         "description": "Retrieve a list of recipes based on the user-generated query\n",
@@ -203,6 +253,56 @@ func init() {
         "responses": {
           "200": {
             "description": "post successful responses",
+            "schema": {
+              "$ref": "#/definitions/ReturnCode"
+            }
+          },
+          "500": {
+            "description": "internal service error",
+            "schema": {
+              "$ref": "#/definitions/ReturnCode"
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ReturnCode"
+            }
+          }
+        }
+      }
+    },
+    "/recipe": {
+      "get": {
+        "description": "Retrieve details about a recipe given a recipeID\n",
+        "tags": [
+          "recipe"
+        ],
+        "summary": "get details about a recipe",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "a recipe ID",
+            "name": "recipeID",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful",
+            "schema": {
+              "$ref": "#/definitions/Recipe"
+            }
+          },
+          "400": {
+            "description": "bad requests",
+            "schema": {
+              "$ref": "#/definitions/ReturnCode"
+            }
+          },
+          "404": {
+            "description": "not found",
             "schema": {
               "$ref": "#/definitions/ReturnCode"
             }

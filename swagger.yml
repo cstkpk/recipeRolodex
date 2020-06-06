@@ -31,6 +31,40 @@ paths:
           description: unexpected error
           schema:
             $ref: "#/definitions/ReturnCode"
+  /recipe:
+    get:
+      tags:
+        - recipe
+      summary: get details about a recipe
+      description: |
+        Retrieve details about a recipe given a recipeID
+      parameters:
+        - name: recipeID
+          description: a recipe ID
+          in: query
+          required: true
+          type: integer
+      responses:
+        200:
+          description: successful
+          schema:
+            $ref: "#/definitions/Recipe"
+        400:
+          description: bad requests
+          schema:
+            $ref: "#/definitions/ReturnCode"
+        404:
+          description: not found
+          schema:
+            $ref: "#/definitions/ReturnCode"
+        500:
+          description: internal service error
+          schema:
+            $ref: "#/definitions/ReturnCode"
+        default:
+          description: unexpected error
+          schema:
+            $ref: "#/definitions/ReturnCode"
   /recipes:
     get:
       tags:

@@ -20,6 +20,7 @@ import (
 	"github.com/go-openapi/swag"
 
 	"github.com/cstkpk/recipeRolodex/restapi/operations/ready"
+	"github.com/cstkpk/recipeRolodex/restapi/operations/recipe"
 	"github.com/cstkpk/recipeRolodex/restapi/operations/recipes"
 )
 
@@ -46,6 +47,9 @@ func NewRecipeRolodexAPI(spec *loads.Document) *RecipeRolodexAPI {
 
 		ReadyGetReadyHandler: ready.GetReadyHandlerFunc(func(params ready.GetReadyParams) middleware.Responder {
 			return middleware.NotImplemented("operation ready.GetReady has not yet been implemented")
+		}),
+		RecipeGetRecipeHandler: recipe.GetRecipeHandlerFunc(func(params recipe.GetRecipeParams) middleware.Responder {
+			return middleware.NotImplemented("operation recipe.GetRecipe has not yet been implemented")
 		}),
 		RecipesGetRecipesHandler: recipes.GetRecipesHandlerFunc(func(params recipes.GetRecipesParams) middleware.Responder {
 			return middleware.NotImplemented("operation recipes.GetRecipes has not yet been implemented")
@@ -85,6 +89,8 @@ type RecipeRolodexAPI struct {
 
 	// ReadyGetReadyHandler sets the operation handler for the get ready operation
 	ReadyGetReadyHandler ready.GetReadyHandler
+	// RecipeGetRecipeHandler sets the operation handler for the get recipe operation
+	RecipeGetRecipeHandler recipe.GetRecipeHandler
 	// RecipesGetRecipesHandler sets the operation handler for the get recipes operation
 	RecipesGetRecipesHandler recipes.GetRecipesHandler
 	// ServeError is called when an error is received, there is a default handler
@@ -155,6 +161,9 @@ func (o *RecipeRolodexAPI) Validate() error {
 
 	if o.ReadyGetReadyHandler == nil {
 		unregistered = append(unregistered, "ready.GetReadyHandler")
+	}
+	if o.RecipeGetRecipeHandler == nil {
+		unregistered = append(unregistered, "recipe.GetRecipeHandler")
 	}
 	if o.RecipesGetRecipesHandler == nil {
 		unregistered = append(unregistered, "recipes.GetRecipesHandler")
@@ -251,6 +260,10 @@ func (o *RecipeRolodexAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/ready"] = ready.NewGetReady(o.context, o.ReadyGetReadyHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/recipe"] = recipe.NewGetRecipe(o.context, o.RecipeGetRecipeHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

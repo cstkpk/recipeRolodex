@@ -12,6 +12,7 @@ import (
 
 	"github.com/cstkpk/recipeRolodex/restapi/operations"
 	"github.com/cstkpk/recipeRolodex/restapi/operations/ready"
+	"github.com/cstkpk/recipeRolodex/restapi/operations/recipe"
 	"github.com/cstkpk/recipeRolodex/restapi/operations/recipes"
 )
 
@@ -38,6 +39,11 @@ func configureAPI(api *operations.RecipeRolodexAPI) http.Handler {
 	// GET /ready
 	api.ReadyGetReadyHandler = ready.GetReadyHandlerFunc(func(params ready.GetReadyParams) middleware.Responder {
 		return ready.Get(params)
+	})
+
+	// GET /recipe
+	api.RecipeGetRecipeHandler = recipe.GetRecipeHandlerFunc(func(params recipe.GetRecipeParams) middleware.Responder {
+		return recipe.Get(params)
 	})
 
 	// GET /recipes

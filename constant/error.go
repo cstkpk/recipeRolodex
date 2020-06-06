@@ -10,7 +10,8 @@ var Errors = struct {
 	InternalService     error
 
 	// Endpoint errors
-	NoRecipesFound error
+	NoRecipesFound  error
+	NoRecipeIDFound error
 }{
 	// DB errors
 	DbConnectionFailure: rrerror.New("There was an error connecting to the database", 500),
@@ -18,5 +19,6 @@ var Errors = struct {
 	InternalService:     rrerror.New("Internal service error", 500),
 
 	// Endpoint errors
-	NoRecipesFound: rrerror.New("No recipes found that match search criteria", 404),
+	NoRecipesFound:  rrerror.New("No recipes found that match search criteria", 404),
+	NoRecipeIDFound: rrerror.New("No recipe found with the specified ID", 404),
 }
