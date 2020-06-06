@@ -11,14 +11,15 @@ import (
 
 // GetRecipesList queries the DB for recipes that match the requested parameters and returns a list
 func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*models.Recipes, error) {
-	db, err := mysql.Connect(ctx)
+	db, err := mysql.Connect(ctx, constant.DBs.RecipeRolodex)
 	if err != nil {
 		fmt.Println("Error:", err.Error())
 		return nil, constant.Errors.DbConnectionFailure
 	}
 
 	// First find IDs associated with requested ingredients
-	ingredientQuery := `SELECT autoID FROM Ingredients WHERE (name=? OR name=? OR name=?)`
+	ingredientQuery := `SELECT autoID FROM ` + constant.RR.Ingredients +
+		` WHERE (name=? OR name=? OR name=?)`
 
 	rows, err := db.QueryContext(ctx, ingredientQuery, ing1, ing2, ing3)
 	if err != nil {
@@ -41,7 +42,8 @@ func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*mode
 	}
 
 	// Then find recipeIDs associated with ingredientIDs
-	linkQuery := `SELECT recipeID FROM Link WHERE 1=1`
+	linkQuery := `SELECT recipeID FROM ` + constant.RR.Link +
+		` WHERE 1=1`
 	var args []interface{}
 	for i, id := range ingredientIDs {
 		if i == 0 {
@@ -82,8 +84,8 @@ func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*mode
 	}
 
 	// Then get recipe details associated with recipeIDs (and season if included in query)
-	query := `SELECT autoID, season, title, author, link FROM Recipes 
-		WHERE 1=1`
+	query := `SELECT autoID, season, title, author, link FROM ` + constant.RR.Recipes +
+		` WHERE 1=1`
 	var args2 []interface{}
 	for i, id := range recipeIDs {
 		if i == 0 {

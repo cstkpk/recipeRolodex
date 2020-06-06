@@ -13,7 +13,7 @@ func GetReady(ctx context.Context) error {
 	// TODO: Create a connection pool to the db
 	// For now just pinging it
 
-	_, err := mysql.Connect(ctx)
+	_, err := mysql.Connect(ctx, constant.DBs.RecipeRolodex)
 	if err != nil {
 		fmt.Println("Error:", err.Error())
 		return constant.Errors.DbConnectionFailure

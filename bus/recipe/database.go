@@ -12,13 +12,14 @@ import (
 
 // GetRecipeDetails queries the DB to find details pertaining to a specified recipe ID
 func GetRecipeDetails(ctx context.Context, recipeID int64) (*models.Recipe, error) {
-	db, err := mysql.Connect(ctx)
+	db, err := mysql.Connect(ctx, constant.DBs.RecipeRolodex)
 	if err != nil {
 		fmt.Println("Error:", err.Error())
 		return nil, constant.Errors.DbConnectionFailure
 	}
 
-	query := `SELECT season, title, author, link FROM Recipes WHERE autoID=?`
+	query := `SELECT season, title, author, link FROM ` + constant.RR.Recipes +
+		` WHERE autoID=?`
 
 	var details models.Recipe
 	err = db.QueryRowContext(ctx, query, recipeID).Scan(
