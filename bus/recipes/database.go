@@ -82,7 +82,7 @@ func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*mode
 	}
 
 	// Then get recipe details associated with recipeIDs (and season if included in query)
-	query := `SELECT season, title, author, link FROM Recipes 
+	query := `SELECT autoID, season, title, author, link FROM Recipes 
 		WHERE 1=1`
 	var args2 []interface{}
 	for i, id := range recipeIDs {
@@ -114,6 +114,7 @@ func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*mode
 	for rows.Next() {
 		var recipe models.Recipe
 		err = rows.Scan(
+			&recipe.ID,
 			&recipe.Season,
 			&recipe.Title,
 			&recipe.Author,
