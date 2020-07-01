@@ -33,3 +33,27 @@ func Get(params GetRecipeParams) middleware.Responder {
 	}
 	return NewGetRecipeOK().WithPayload(details)
 }
+
+// Post inserts the new recipe details into the DB and returns an error or success code
+func Post(params PostRecipeParams) middleware.Responder {
+	ctx := params.HTTPRequest.Context()
+
+	err := busrecipe.PostRecipe(ctx, params.NewRecipe)
+
+	if err != nil {
+		switch e := err.(type) {
+		case *rrerror.RRError:
+			switch e.Code() {
+			// 400
+			case PostRecipeBadRequestCode:
+				status := models.ReturnCode{Code: int64(PostRecipeBadRequestCode), Message: e.Error()}
+				return NewPostRecipeBadRequest().WithPayload(&status)
+			}
+		}
+		// 500 / catch-all
+		status := models.ReturnCode{Code: int64(PostRecipeInternalServerErrorCode), Message: err.Error()}
+		return NewPostRecipeInternalServerError().WithPayload(&status)
+	}
+	status := models.ReturnCode{Code: int64(PostRecipeOKCode), Message: "Successfully added new recipe"}
+	return NewPostRecipeOK().WithPayload(&status)
+}

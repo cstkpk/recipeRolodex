@@ -36,7 +36,7 @@ func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*mode
 		)
 		if err != nil {
 			fmt.Println("Error:", err.Error())
-			return nil, constant.Errors.InternalService
+			return nil, constant.Errors.InternalServer
 		}
 		ingredientIDs = append(ingredientIDs, ingredientID)
 	}
@@ -73,7 +73,7 @@ func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*mode
 		)
 		if err != nil {
 			fmt.Println("Error:", err.Error())
-			return nil, constant.Errors.InternalService
+			return nil, constant.Errors.InternalServer
 		}
 		recipeIDs = append(recipeIDs, recipeID)
 	}
@@ -130,7 +130,7 @@ func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*mode
 	}
 	if recipeList == nil {
 		fmt.Println("Error: recipeList is empty")
-		return nil, constant.Errors.InternalService
+		return nil, constant.Errors.InternalServer
 	}
 
 	var recipes *models.Recipes

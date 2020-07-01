@@ -46,6 +46,11 @@ func configureAPI(api *operations.RecipeRolodexAPI) http.Handler {
 		return recipe.Get(params)
 	})
 
+	// POST /recipe
+	api.RecipePostRecipeHandler = recipe.PostRecipeHandlerFunc(func(params recipe.PostRecipeParams) middleware.Responder {
+		return recipe.Post(params)
+	})
+
 	// GET /recipes
 	api.RecipesGetRecipesHandler = recipes.GetRecipesHandlerFunc(func(params recipes.GetRecipesParams) middleware.Responder {
 		return recipes.Get(params)

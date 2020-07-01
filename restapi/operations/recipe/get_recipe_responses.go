@@ -60,7 +60,7 @@ func (o *GetRecipeOK) WriteResponse(rw http.ResponseWriter, producer runtime.Pro
 // GetRecipeBadRequestCode is the HTTP code returned for type GetRecipeBadRequest
 const GetRecipeBadRequestCode int = 400
 
-/*GetRecipeBadRequest bad requests
+/*GetRecipeBadRequest bad request
 
 swagger:response getRecipeBadRequest
 */

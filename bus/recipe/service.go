@@ -18,3 +18,15 @@ func GetRecipe(ctx context.Context, recipeID int64) (*models.Recipe, error) {
 
 	return details, nil
 }
+
+// PostRecipe calls a DB query function to insert the new recipe details
+func PostRecipe(ctx context.Context, newRecipe *models.NewRecipe) error {
+
+	err := PostRecipeDetails(ctx, newRecipe)
+	if err != nil {
+		fmt.Println("Error:", err.Error())
+		return err
+	}
+
+	return nil
+}

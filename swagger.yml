@@ -50,11 +50,41 @@ paths:
           schema:
             $ref: "#/definitions/Recipe"
         400:
-          description: bad requests
+          description: bad request
           schema:
             $ref: "#/definitions/ReturnCode"
         404:
           description: not found
+          schema:
+            $ref: "#/definitions/ReturnCode"
+        500:
+          description: internal service error
+          schema:
+            $ref: "#/definitions/ReturnCode"
+        default:
+          description: unexpected error
+          schema:
+            $ref: "#/definitions/ReturnCode"
+    post:
+      tags:
+        - recipe
+      summary: create a new recipe
+      description: |
+        Add a new set of recipe details to the database
+      parameters:
+        - name: newRecipe
+          description: new recipe details
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/NewRecipe"
+      responses:
+        200:
+          description: successful
+          schema:
+            $ref: "#/definitions/ReturnCode"
+        400:
+          description: bad request
           schema:
             $ref: "#/definitions/ReturnCode"
         500:
@@ -125,6 +155,28 @@ definitions:
       message:
         type: string
         readOnly: true
+  NewRecipe:
+    type: object
+    required:
+      - season
+      - title
+      - author
+      - link
+      - ingredientList
+    properties:
+      season:
+        type: string
+      title:
+        type: string
+      author:
+        type: string
+      link:
+        type: string
+      ingredientList:
+        type: array
+        items:
+          type: string
+        example: ["apples", "bananas", "peaches"]
   Recipes:
     type: object
     properties:

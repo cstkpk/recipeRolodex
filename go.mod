@@ -13,7 +13,7 @@ require (
 	github.com/go-openapi/validate v0.19.8
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/jessevdk/go-flags v1.4.0
-	github.com/mitchellh/mapstructure v1.3.1 // indirect
+	github.com/mitchellh/mapstructure v1.3.2 // indirect
 	go.mongodb.org/mongo-driver v1.3.4 // indirect
 	golang.org/x/net v0.0.0-20200602114024-627f9648deb9
 	gopkg.in/yaml.v2 v2.3.0 // indirect

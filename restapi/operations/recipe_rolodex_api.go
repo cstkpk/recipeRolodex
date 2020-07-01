@@ -54,6 +54,9 @@ func NewRecipeRolodexAPI(spec *loads.Document) *RecipeRolodexAPI {
 		RecipesGetRecipesHandler: recipes.GetRecipesHandlerFunc(func(params recipes.GetRecipesParams) middleware.Responder {
 			return middleware.NotImplemented("operation recipes.GetRecipes has not yet been implemented")
 		}),
+		RecipePostRecipeHandler: recipe.PostRecipeHandlerFunc(func(params recipe.PostRecipeParams) middleware.Responder {
+			return middleware.NotImplemented("operation recipe.PostRecipe has not yet been implemented")
+		}),
 	}
 }
 
@@ -93,6 +96,8 @@ type RecipeRolodexAPI struct {
 	RecipeGetRecipeHandler recipe.GetRecipeHandler
 	// RecipesGetRecipesHandler sets the operation handler for the get recipes operation
 	RecipesGetRecipesHandler recipes.GetRecipesHandler
+	// RecipePostRecipeHandler sets the operation handler for the post recipe operation
+	RecipePostRecipeHandler recipe.PostRecipeHandler
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
 	ServeError func(http.ResponseWriter, *http.Request, error)
@@ -167,6 +172,9 @@ func (o *RecipeRolodexAPI) Validate() error {
 	}
 	if o.RecipesGetRecipesHandler == nil {
 		unregistered = append(unregistered, "recipes.GetRecipesHandler")
+	}
+	if o.RecipePostRecipeHandler == nil {
+		unregistered = append(unregistered, "recipe.PostRecipeHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -268,6 +276,10 @@ func (o *RecipeRolodexAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/recipes"] = recipes.NewGetRecipes(o.context, o.RecipesGetRecipesHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/recipe"] = recipe.NewPostRecipe(o.context, o.RecipePostRecipeHandler)
 }
 
 // Serve creates a http handler to serve the API over HTTP

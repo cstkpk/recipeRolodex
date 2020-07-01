@@ -87,13 +87,57 @@ func init() {
             }
           },
           "400": {
-            "description": "bad requests",
+            "description": "bad request",
             "schema": {
               "$ref": "#/definitions/ReturnCode"
             }
           },
           "404": {
             "description": "not found",
+            "schema": {
+              "$ref": "#/definitions/ReturnCode"
+            }
+          },
+          "500": {
+            "description": "internal service error",
+            "schema": {
+              "$ref": "#/definitions/ReturnCode"
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ReturnCode"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Add a new set of recipe details to the database\n",
+        "tags": [
+          "recipe"
+        ],
+        "summary": "create a new recipe",
+        "parameters": [
+          {
+            "description": "new recipe details",
+            "name": "newRecipe",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewRecipe"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful",
+            "schema": {
+              "$ref": "#/definitions/ReturnCode"
+            }
+          },
+          "400": {
+            "description": "bad request",
             "schema": {
               "$ref": "#/definitions/ReturnCode"
             }
@@ -180,6 +224,41 @@ func init() {
     }
   },
   "definitions": {
+    "NewRecipe": {
+      "type": "object",
+      "required": [
+        "season",
+        "title",
+        "author",
+        "link",
+        "ingredientList"
+      ],
+      "properties": {
+        "author": {
+          "type": "string"
+        },
+        "ingredientList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": [
+            "apples",
+            "bananas",
+            "peaches"
+          ]
+        },
+        "link": {
+          "type": "string"
+        },
+        "season": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
     "Recipe": {
       "type": "object",
       "properties": {
@@ -296,13 +375,57 @@ func init() {
             }
           },
           "400": {
-            "description": "bad requests",
+            "description": "bad request",
             "schema": {
               "$ref": "#/definitions/ReturnCode"
             }
           },
           "404": {
             "description": "not found",
+            "schema": {
+              "$ref": "#/definitions/ReturnCode"
+            }
+          },
+          "500": {
+            "description": "internal service error",
+            "schema": {
+              "$ref": "#/definitions/ReturnCode"
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ReturnCode"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Add a new set of recipe details to the database\n",
+        "tags": [
+          "recipe"
+        ],
+        "summary": "create a new recipe",
+        "parameters": [
+          {
+            "description": "new recipe details",
+            "name": "newRecipe",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewRecipe"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful",
+            "schema": {
+              "$ref": "#/definitions/ReturnCode"
+            }
+          },
+          "400": {
+            "description": "bad request",
             "schema": {
               "$ref": "#/definitions/ReturnCode"
             }
@@ -389,6 +512,41 @@ func init() {
     }
   },
   "definitions": {
+    "NewRecipe": {
+      "type": "object",
+      "required": [
+        "season",
+        "title",
+        "author",
+        "link",
+        "ingredientList"
+      ],
+      "properties": {
+        "author": {
+          "type": "string"
+        },
+        "ingredientList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": [
+            "apples",
+            "bananas",
+            "peaches"
+          ]
+        },
+        "link": {
+          "type": "string"
+        },
+        "season": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
     "Recipe": {
       "type": "object",
       "properties": {
