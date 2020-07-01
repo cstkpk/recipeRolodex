@@ -1,30 +1,30 @@
 INSERT INTO Ingredients (name) VALUES
 /* Vegetables */
-("Artichoke"), ("Arugula"), ("Asparagus"), ("Beets"), ("Bok Choy"), ("Broccoli"), ("Brussels Sprouts"),
-("Butternut Squash"), ("Cabbage"), ("Carrot"), ("Cauliflower"), ("Celery"), ("Collards"), ("Corn"), 
-("Cucumber"), ("Eggplant"), ("Fennel"), ("Kale"), ("Kohlrabi"), ("Leeks"), 
-("Lettuce"), ("Mushrooms"), ("Okra"), ("Onion"), ("Parsnip"), ("Peas"), ("Pepper"), ("Potato"), 
-("Pumpkin"), ("Radish"), ("Rutabaga"), ("Spaghetti Squash"), ("Spinach"), ("Sweet Potato"),
-("Swiss Chard"), ("Tomatillo"), ("Tomato"), ("Turnip"), ("Winter Squash"), ("Yam"), ("Zucchini"),
+("artichoke"), ("arugula"), ("asparagus"), ("beets"), ("bok choy"), ("broccoli"), ("brussels sprouts"),
+("butternut squash"), ("cabbage"), ("carrot"), ("cauliflower"), ("celery"), ("collards"), ("corn"), 
+("cucumber"), ("eggplant"), ("fennel"), ("kale"), ("kohlrabi"), ("leeks"), 
+("lettuce"), ("mushrooms"), ("okra"), ("onion"), ("parsnip"), ("peas"), ("pepper"), ("potato"), 
+("pumpkin"), ("radish"), ("rutabaga"), ("spaghetti squash"), ("spinach"), ("sweet potato"),
+("swiss chard"), ("tomatillo"), ("tomato"), ("turnip"), ("winter Squash"), ("yam"), ("zucchini"),
 /* Fruits */
-("Apple"), ("Apricot"), ("Avocado"), ("Banana"), ("Blackberries"), ("Blueberries"), ("Cantaloupe"),
-("Cherries"), ("Clementine"), ("Coconut"), ("Cranberries"), ("Dates"), ("Dragonfruit"), ("Figs"), 
-("Grapefruit"), ("Grapes"), ("Honeydew"), ("Kiwi"), ("Lemon"), ("Lime"), ("Mandarin"), ("Mango"), 
-("Nectarine"), ("Olives"), ("Orange"), ("Peach"), ("Pear"), ("Persimmon"), ("Pineapple"), ("Plantain"),
-("Plum"), ("Pomegranate"), ("Prunes"), ("Raspberries"), ("Rhubarb"), ("Strawberries"), ("Watermelon"),
+("apple"), ("apricot"), ("avocado"), ("banana"), ("blackberries"), ("blueberries"), ("cantaloupe"),
+("cherries"), ("clementine"), ("coconut"), ("cranberries"), ("dates"), ("dragonfruit"), ("dried fruit"), ("figs"), 
+("grapefruit"), ("grapes"), ("honeydew"), ("kiwi"), ("lemon"), ("lime"), ("mandarin"), ("mango"), 
+("nectarine"), ("olives"), ("orange"), ("peach"), ("pear"), ("persimmon"), ("pineapple"), ("plantain"),
+("plum"), ("pomegranate"), ("prunes"), ("raspberries"), ("rhubarb"), ("strawberries"), ("watermelon"),
 /* Herbs and spices */
-("Anise"), ("Basil"), ("Bay Leaf"), ("Caraway"), ("Cayenne"), ("Chives"), ("Cilantro"), ("Coriander"),
-("Dill"), ("Garlic"), ("Ginger"), ("Horseradish"), ("Lavender"), ("Lemongrass"),
-("Licorice"), ("Marjoram"), ("Mint"), ("Oregano"), ("Parsley"), ("Rosemary"), ("Saffron"), ("Sage"),
-("Tarragon"), ("Thyme"), ("Tulsi"), ("Turmeric"),
+("anise"), ("basil"), ("bay leaf"), ("caraway"), ("cayenne"), ("chives"), ("cilantro"), ("coriander"),
+("dill"), ("garlic"), ("ginger"), ("horseradish"), ("lavender"), ("lemongrass"),
+("licorice"), ("marjoram"), ("mint"), ("oregano"), ("parsley"), ("rosemary"), ("saffron"), ("sage"),
+("tarragon"), ("thyme"), ("tulsi"), ("turmeric"),
 /* Grains and beans */
-("Amaranth"), ("Barley"), ("Black Beans"), ("Black Lentils"), ("Brown Lentils"), ("Buckwheat"), 
-("Bulgur"), ("Cannellini Beans"), ("Chickpeas"), ("Einkorn"), ("Farro"), ("Grits"), 
-("Kidney Beans"), ("Millet"), ("Mung Beans"), ("Oats"), ("Polenta"), ("Quinoa"), ("Red Lentils"), 
-("Rice"), ("Rye"), ("Spelt"), ("Teff"), ("Wheat Bran"), ("Wild Rice"),
+("amaranth"), ("barley"), ("black beans"), ("black lentils"), ("brown lentils"), ("buckwheat"), 
+("bulgur"), ("cannellini beans"), ("chickpeas"), ("einkorn"), ("farro"), ("grits"), 
+("kidney beans"), ("millet"), ("mung beans"), ("oats"), ("polenta"), ("quinoa"), ("red lentils"), 
+("rice"), ("rye"), ("spelt"), ("teff"), ("wheat bran"), ("wild rice"),
 /* Nuts and seeds */
-("Almonds"), ("Brazil Nut"), ("Cashews"), ("Chia Seeds"), ("Flaxseed"), ("Hazelnut"), ("Hemp Seed"), 
-("Macadamia"), ("Pecans"), ("Pine Nuts"), ("Pistachios"), ("Pumpkin Seeds"), ("Sesame Seeds"), 
-("Sunflower Seeds"), ("Walnut"),
+("almonds"), ("brazil nut"), ("cashews"), ("chia seeds"), ("flaxseed"), ("hazelnut"), ("hemp seed"), 
+("macadamia"), ("pecans"), ("pine nuts"), ("pistachios"), ("pumpkin seeds"), ("sesame seeds"), 
+("sunflower seeds"), ("walnut"),
 /* Animal Products and Proteins */
-("Beef"), ("Cheese"), ("Chicken"), ("Eggs"), ("Lamb"), ("Milk"), ("Seitan"), ("Tempeh"), ("Tofu");
+("beef"), ("cheese"), ("chicken"), ("eggs"), ("lamb"), ("milk"), ("seitan"), ("tempeh"), ("tofu");

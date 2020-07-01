@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"strings"
 
 	"github.com/cstkpk/recipeRolodex/constant"
 )
@@ -41,6 +42,10 @@ func InsertRecipeDetails(ctx context.Context, tx *sql.Tx, season, title, author,
 // InsertIngredients checks the Ingredients table to make sure the recipe's ingredients exist
 // and if not adds them to the table
 func InsertIngredients(ctx context.Context, tx *sql.Tx, ingredientList []string) error {
+	// First make sure all ingredients are lowercase
+	for i, ing := range ingredientList {
+		ingredientList[i] = strings.ToLower(ing)
+	}
 
 	// First check to see which ingredients are already in the Ingredients table
 	query1 := `SELECT name FROM ` + constant.RR.Ingredients +
