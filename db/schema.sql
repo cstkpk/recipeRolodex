@@ -5,18 +5,18 @@ DROP TABLE IF EXISTS Recipes;
 DROP TABLE IF EXISTS Ingredients;
 
 CREATE TABLE Ingredients (
-  autoID INT NOT NULL AUTO_INCREMENT,
+  id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(50) NOT NULL UNIQUE,
-  PRIMARY KEY (autoID)
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE Recipes (
-  autoID INT NOT NULL AUTO_INCREMENT,
+  id INT NOT NULL AUTO_INCREMENT,
   season VARCHAR(50) NOT NULL,
   title VARCHAR(100) NOT NULL UNIQUE,
   author VARCHAR(100) NOT NULL,
   link VARCHAR(150) NOT NULL UNIQUE,
-  PRIMARY KEY (autoID)
+  PRIMARY KEY (id)
 );
 
 /* When you click a link to a self-written recipe, it'll take you to a new page with a new
@@ -31,10 +31,10 @@ OR as you enter your recipe, you separately enter main ingredients somewhere */
 
 /* Table to link Ingredients and Recipes (two foreign keys) */
 CREATE TABLE Link (
-  autoID INT NOT NULL AUTO_INCREMENT,
+  id INT NOT NULL AUTO_INCREMENT,
   recipeID INT NOT NULL,
   ingredientID INT NOT NULL,
-  PRIMARY KEY (autoID),
-  FOREIGN KEY (recipeID) REFERENCES Recipes (autoID),
-  FOREIGN KEY (ingredientID) REFERENCES Ingredients (autoID)
+  PRIMARY KEY (id),
+  FOREIGN KEY (recipeID) REFERENCES Recipes (id),
+  FOREIGN KEY (ingredientID) REFERENCES Ingredients (id)
 );
