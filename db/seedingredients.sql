@@ -1,4 +1,4 @@
-INSERT INTO Ingredients (name) VALUES
+INSERT INTO RecipeRolodex.Ingredients (name) VALUES
 /* Vegetables */
 ("artichoke"), ("arugula"), ("asparagus"), ("beets"), ("bok choy"), ("broccoli"), ("brussels sprouts"),
 ("butternut squash"), ("cabbage"), ("carrot"), ("cauliflower"), ("celery"), ("collards"), ("corn"), 
