@@ -72,6 +72,13 @@ func PostRecipeDetails(ctx context.Context, newRecipe *models.NewRecipe) error {
 		}
 	}
 
+	err = InsertLink(ctx, tx, *newRecipe.Title, newRecipe.IngredientList)
+	if err != nil {
+		tx.Rollback()
+		fmt.Println("Error:", err.Error())
+		return err
+	}
+
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
