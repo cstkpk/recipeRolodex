@@ -117,7 +117,7 @@ func InsertIngredients(ctx context.Context, tx *sql.Tx, ingredientList []string)
 	return nil
 }
 
-// InsertLink creates the Link row in the DB, which links together the
+// InsertLink creates the Link row(s) in the DB, which links together the
 // recipe and its ingredients
 func InsertLink(ctx context.Context, tx *sql.Tx, recipeTitle string, ingredients []string) error {
 

@@ -2,6 +2,7 @@ package busrecipes
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 
 	"github.com/cstkpk/recipeRolodex/constant"
@@ -17,8 +18,40 @@ func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*mode
 		return nil, constant.Errors.DbConnectionFailure
 	}
 
-	// First find IDs associated with requested ingredients
-	ingredientQuery := `SELECT autoID FROM ` + constant.RR.Ingredients +
+	var recipeIDs []int64
+	// If the search includes at least one ingredient, get ingredient information first
+	// Otherwise go straight to query based on season
+	if ing1 != "" || ing2 != "" || ing3 != "" {
+		// First find IDs associated with requested ingredients
+		ingredientIDs, err := getIngredientIDs(ctx, ing1, ing2, ing3, db)
+		if err != nil {
+			fmt.Println("Error:", err.Error())
+			return nil, err
+		}
+
+		// Then find recipeIDs associated with ingredientIDs
+		ids, err := getRecipeIDs(ctx, ingredientIDs, db)
+		if err != nil {
+			fmt.Println("Error:", err.Error())
+			return nil, err
+		}
+		recipeIDs = ids
+	}
+
+	// Get recipe details associated with recipeIDs and/or season
+	recipes, err := getRecipes(ctx, recipeIDs, season, db)
+	if err != nil {
+		fmt.Println("Error:", err.Error())
+		return nil, err
+	}
+
+	fmt.Println("Info: Successfully returned recipe list")
+	return recipes, nil
+}
+
+func getIngredientIDs(ctx context.Context, ing1, ing2, ing3 string, db *sql.DB) ([]int64, error) {
+
+	ingredientQuery := `SELECT id FROM ` + constant.RR.Ingredients +
 		` WHERE (name=? OR name=? OR name=?)`
 
 	rows, err := db.QueryContext(ctx, ingredientQuery, ing1, ing2, ing3)
@@ -28,9 +61,9 @@ func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*mode
 	}
 	defer rows.Close()
 
-	var ingredientIDs []string
+	var ingredientIDs []int64
 	for rows.Next() {
-		var ingredientID string
+		var ingredientID int64
 		err = rows.Scan(
 			&ingredientID,
 		)
@@ -41,7 +74,17 @@ func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*mode
 		ingredientIDs = append(ingredientIDs, ingredientID)
 	}
 
-	// Then find recipeIDs associated with ingredientIDs
+	if ingredientIDs == nil {
+		fmt.Println("Error:", constant.Errors.NoRecipesFound.Error())
+		return nil, constant.Errors.NoRecipesFound
+	}
+
+	fmt.Printf("Info: Successfully returned ingredientIDs: %v\n", ingredientIDs)
+	return ingredientIDs, nil
+}
+
+func getRecipeIDs(ctx context.Context, ingredientIDs []int64, db *sql.DB) ([]int64, error) {
+
 	linkQuery := `SELECT recipeID FROM ` + constant.RR.Link +
 		` WHERE 1=1`
 	var args []interface{}
@@ -58,16 +101,16 @@ func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*mode
 		linkQuery += `)`
 	}
 
-	rows, err = db.QueryContext(ctx, linkQuery, args...)
+	rows, err := db.QueryContext(ctx, linkQuery, args...)
 	if err != nil {
 		fmt.Println("Error:", err.Error())
 		return nil, constant.Errors.DbQueryFailure
 	}
 	defer rows.Close()
 
-	var recipeIDs []string
+	var recipeIDs []int64
 	for rows.Next() {
-		var recipeID string
+		var recipeID int64
 		err = rows.Scan(
 			&recipeID,
 		)
@@ -83,17 +126,22 @@ func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*mode
 		return nil, constant.Errors.NoRecipesFound
 	}
 
-	// Then get recipe details associated with recipeIDs (and season if included in query)
-	query := `SELECT autoID, season, title, author, link FROM ` + constant.RR.Recipes +
+	fmt.Printf("Info: Successfully returned recipeIDs: %v\n", recipeIDs)
+	return recipeIDs, nil
+}
+
+func getRecipes(ctx context.Context, recipeIDs []int64, season string, db *sql.DB) (*models.Recipes, error) {
+
+	query := `SELECT id, season, title, author, link FROM ` + constant.RR.Recipes +
 		` WHERE 1=1`
 	var args2 []interface{}
 	for i, id := range recipeIDs {
 		if i == 0 {
 			args2 = append(args2, id)
-			query += ` AND (autoID=?`
+			query += ` AND (id=?`
 		} else {
 			args2 = append(args2, id)
-			query += ` OR autoID=?`
+			query += ` OR id=?`
 		}
 	}
 	if len(recipeIDs) != 0 {
@@ -105,7 +153,7 @@ func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*mode
 		query += ` AND season=?`
 	}
 
-	rows, err = db.QueryContext(ctx, query, args2...)
+	rows, err := db.QueryContext(ctx, query, args2...)
 	if err != nil {
 		fmt.Println("Error:", err.Error())
 		return nil, constant.Errors.DbQueryFailure
@@ -129,14 +177,14 @@ func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*mode
 		recipeList = append(recipeList, &recipe)
 	}
 	if recipeList == nil {
-		fmt.Println("Error: recipeList is empty")
-		return nil, constant.Errors.InternalServer
+		fmt.Println("Error:", constant.Errors.NoRecipesFound.Error())
+		return nil, constant.Errors.NoRecipesFound
 	}
 
 	var recipes *models.Recipes
 	recipes = &models.Recipes{}
 	recipes.RecipeList = recipeList
 
-	fmt.Println("Info: Successfully returned recipe list")
+	fmt.Printf("Info: Successfully returned %v recipe(s)\n", len(recipes.RecipeList))
 	return recipes, nil
 }
