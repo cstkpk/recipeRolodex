@@ -79,27 +79,31 @@ func InsertIngredients(ctx context.Context, tx *sql.Tx, ingredientList []string)
 		ingredients = append(ingredients, ingredient)
 	}
 
-	fmt.Println("Ingredients: ", ingredients)
-
 	// Remove ingredients that are already in DB
+	var ingToAdd []string
+	copy(ingToAdd, ingredientList)
 	for _, ing1 := range ingredients {
-		for j, ing2 := range ingredientList {
+		for j, ing2 := range ingToAdd {
 			if ing1 == ing2 {
-				ingredientList[j] = ingredientList[len(ingredientList)-1]
-				ingredientList[len(ingredientList)-1] = ""
-				ingredientList = ingredientList[:len(ingredientList)-1]
+				ingToAdd[j] = ingToAdd[len(ingToAdd)-1]
+				ingToAdd[len(ingToAdd)-1] = ""
+				ingToAdd = ingToAdd[:len(ingToAdd)-1]
 			}
 		}
 	}
 
-	fmt.Println("IngredientList: ", ingredientList)
+	// If there are no new ingredients to insert, return
+	if len(ingToAdd) == 0 {
+		fmt.Println("Info: no new ingredients to insert")
+		return nil
+	}
 
 	// Then insert remaining ingredients into DB
 	query := `INSERT INTO ` + constant.RR.Ingredients +
 		` (name) VALUES`
 
 	var args []interface{}
-	for i, ing := range ingredientList {
+	for i, ing := range ingToAdd {
 		args = append(args, ing)
 		if i == 0 {
 			query += " (?)"
@@ -114,13 +118,13 @@ func InsertIngredients(ctx context.Context, tx *sql.Tx, ingredientList []string)
 		return constant.Errors.DbInsertFailure
 	}
 
+	fmt.Printf("Info: Successfully inserted %v ingredients\n", len(ingToAdd))
 	return nil
 }
 
 // InsertLink creates the Link row(s) in the DB, which links together the
 // recipe and its ingredients
 func InsertLink(ctx context.Context, tx *sql.Tx, recipeTitle string, ingredients []string) error {
-
 	// First find recipe ID
 	queryRecipe := `SELECT id FROM ` + constant.RR.Recipes +
 		` WHERE title = ?`
@@ -184,6 +188,6 @@ func InsertLink(ctx context.Context, tx *sql.Tx, recipeTitle string, ingredients
 		}
 	}
 
-	fmt.Printf("Info: Inserted link rows for ingredients with IDs %v for recipe with ID %v", ingredientIDs, recipeID)
+	fmt.Printf("Info: Inserted link rows for ingredients with IDs %v for recipe with ID %v \n", ingredientIDs, recipeID)
 	return nil
 }

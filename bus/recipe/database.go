@@ -19,7 +19,7 @@ func GetRecipeDetails(ctx context.Context, recipeID int64) (*models.Recipe, erro
 	}
 
 	query := `SELECT season, title, author, link FROM ` + constant.RR.Recipes +
-		` WHERE autoID=?`
+		` WHERE id=?`
 
 	var details models.Recipe
 	err = db.QueryRowContext(ctx, query, recipeID).Scan(
@@ -36,7 +36,7 @@ func GetRecipeDetails(ctx context.Context, recipeID int64) (*models.Recipe, erro
 		return nil, constant.Errors.DbQueryFailure
 	}
 
-	fmt.Printf("Info: Successfully retrieved recipe details for recipe with ID %v", recipeID)
+	fmt.Printf("Info: Successfully retrieved recipe details for recipe with ID %v \n", recipeID)
 	return &details, nil
 }
 
