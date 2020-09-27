@@ -2,8 +2,8 @@ package busrecipes
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/cstkpk/recipeRolodex/logger"
 	"github.com/cstkpk/recipeRolodex/models"
 )
 
@@ -12,7 +12,7 @@ func GetRecipes(ctx context.Context, ing1, ing2, ing3, season string) (*models.R
 
 	list, err := GetRecipesList(ctx, ing1, ing2, ing3, season)
 	if err != nil {
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		return nil, err
 	}
 

@@ -3,8 +3,9 @@ package mysql
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"os"
+
+	"github.com/cstkpk/recipeRolodex/logger"
 
 	// mysql driver
 	_ "github.com/go-sql-driver/mysql"
@@ -17,15 +18,15 @@ func Connect(ctx context.Context, dbName string) (*sql.DB, error) {
 
 	db, err := sql.Open("mysql", dbusername+":"+dbpassword+"@tcp(127.0.0.1:3306)/"+dbName)
 	if err != nil {
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		return nil, err
 	}
 
 	err = db.Ping()
 	if err != nil {
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println("Error:", err.Error())
 		return nil, err
 	}
-	fmt.Println("Successfully connected to db")
+
 	return db, nil
 }

@@ -2,8 +2,8 @@ package recipe
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/cstkpk/recipeRolodex/logger"
 	"github.com/cstkpk/recipeRolodex/models"
 )
 
@@ -12,7 +12,7 @@ func GetRecipe(ctx context.Context, recipeID int64) (*models.Recipe, error) {
 
 	details, err := GetRecipeDetails(ctx, recipeID)
 	if err != nil {
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		return nil, err
 	}
 
@@ -24,7 +24,7 @@ func PostRecipe(ctx context.Context, newRecipe *models.NewRecipe) error {
 
 	err := PostRecipeDetails(ctx, newRecipe)
 	if err != nil {
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		return err
 	}
 

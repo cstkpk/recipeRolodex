@@ -3,9 +3,9 @@ package recipe
 import (
 	"context"
 	"database/sql"
-	"fmt"
 
 	"github.com/cstkpk/recipeRolodex/constant"
+	"github.com/cstkpk/recipeRolodex/logger"
 	"github.com/cstkpk/recipeRolodex/models"
 	"github.com/cstkpk/recipeRolodex/mysql"
 )
@@ -14,7 +14,7 @@ import (
 func GetRecipeDetails(ctx context.Context, recipeID int64) (*models.Recipe, error) {
 	db, err := mysql.Connect(ctx, constant.DBs.RecipeRolodex)
 	if err != nil {
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		return nil, constant.Errors.DbConnectionFailure
 	}
 
@@ -29,14 +29,14 @@ func GetRecipeDetails(ctx context.Context, recipeID int64) (*models.Recipe, erro
 		&details.Link,
 	)
 	if err != nil {
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		if err == sql.ErrNoRows {
 			return nil, constant.Errors.NoRecipeIDFound
 		}
 		return nil, constant.Errors.DbQueryFailure
 	}
 
-	fmt.Printf("Info: Successfully retrieved recipe details for recipe with ID %v \n", recipeID)
+	logger.Info.Printf("%s Successfully retrieved recipe details for recipe with ID %v", logger.GetCallInfo(), recipeID)
 	return &details, nil
 }
 
@@ -44,13 +44,13 @@ func GetRecipeDetails(ctx context.Context, recipeID int64) (*models.Recipe, erro
 func PostRecipeDetails(ctx context.Context, newRecipe *models.NewRecipe) error {
 	db, err := mysql.Connect(ctx, constant.DBs.RecipeRolodex)
 	if err != nil {
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		return constant.Errors.DbConnectionFailure
 	}
 
 	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		return constant.Errors.InternalServer
 	}
 
@@ -58,7 +58,7 @@ func PostRecipeDetails(ctx context.Context, newRecipe *models.NewRecipe) error {
 	err = InsertRecipeDetails(ctx, tx, *newRecipe.Season, *newRecipe.Title, *newRecipe.Author, *newRecipe.Link)
 	if err != nil {
 		tx.Rollback()
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		return err
 	}
 
@@ -67,7 +67,7 @@ func PostRecipeDetails(ctx context.Context, newRecipe *models.NewRecipe) error {
 		err = InsertIngredients(ctx, tx, newRecipe.IngredientList)
 		if err != nil {
 			tx.Rollback()
-			fmt.Println("Error:", err.Error())
+			logger.Error.Println(logger.GetCallInfo(), err.Error())
 			return err
 		}
 	}
@@ -75,14 +75,14 @@ func PostRecipeDetails(ctx context.Context, newRecipe *models.NewRecipe) error {
 	err = InsertLink(ctx, tx, *newRecipe.Title, newRecipe.IngredientList)
 	if err != nil {
 		tx.Rollback()
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		return err
 	}
 
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		return constant.Errors.DbInsertFailure
 	}
 

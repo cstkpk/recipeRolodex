@@ -2,9 +2,9 @@ package busready
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/cstkpk/recipeRolodex/constant"
+	"github.com/cstkpk/recipeRolodex/logger"
 	"github.com/cstkpk/recipeRolodex/mysql"
 )
 
@@ -15,9 +15,9 @@ func GetReady(ctx context.Context) error {
 
 	_, err := mysql.Connect(ctx, constant.DBs.RecipeRolodex)
 	if err != nil {
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		return constant.Errors.DbConnectionFailure
 	}
-	fmt.Println("Info: Successfully connected to the database")
+	logger.Info.Println(logger.GetCallInfo(), "Successfully connected to the database")
 	return nil
 }

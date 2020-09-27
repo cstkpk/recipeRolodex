@@ -3,9 +3,9 @@ package busrecipes
 import (
 	"context"
 	"database/sql"
-	"fmt"
 
 	"github.com/cstkpk/recipeRolodex/constant"
+	"github.com/cstkpk/recipeRolodex/logger"
 	"github.com/cstkpk/recipeRolodex/models"
 	"github.com/cstkpk/recipeRolodex/mysql"
 )
@@ -14,7 +14,7 @@ import (
 func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*models.Recipes, error) {
 	db, err := mysql.Connect(ctx, constant.DBs.RecipeRolodex)
 	if err != nil {
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		return nil, constant.Errors.DbConnectionFailure
 	}
 
@@ -25,14 +25,14 @@ func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*mode
 		// First find IDs associated with requested ingredients
 		ingredientIDs, err := getIngredientIDs(ctx, ing1, ing2, ing3, db)
 		if err != nil {
-			fmt.Println("Error:", err.Error())
+			logger.Error.Println(logger.GetCallInfo(), err.Error())
 			return nil, err
 		}
 
 		// Then find recipeIDs associated with ingredientIDs
 		ids, err := getRecipeIDs(ctx, ingredientIDs, db)
 		if err != nil {
-			fmt.Println("Error:", err.Error())
+			logger.Error.Println(logger.GetCallInfo(), err.Error())
 			return nil, err
 		}
 		recipeIDs = ids
@@ -41,11 +41,11 @@ func GetRecipesList(ctx context.Context, ing1, ing2, ing3, season string) (*mode
 	// Get recipe details associated with recipeIDs and/or season
 	recipes, err := getRecipes(ctx, recipeIDs, season, db)
 	if err != nil {
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		return nil, err
 	}
 
-	fmt.Println("Info: Successfully returned recipe list")
+	logger.Info.Println(logger.GetCallInfo(), "Successfully returned recipe list")
 	return recipes, nil
 }
 
@@ -56,7 +56,7 @@ func getIngredientIDs(ctx context.Context, ing1, ing2, ing3 string, db *sql.DB) 
 
 	rows, err := db.QueryContext(ctx, ingredientQuery, ing1, ing2, ing3)
 	if err != nil {
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		return nil, constant.Errors.DbQueryFailure
 	}
 	defer rows.Close()
@@ -68,18 +68,18 @@ func getIngredientIDs(ctx context.Context, ing1, ing2, ing3 string, db *sql.DB) 
 			&ingredientID,
 		)
 		if err != nil {
-			fmt.Println("Error:", err.Error())
+			logger.Error.Println(logger.GetCallInfo(), err.Error())
 			return nil, constant.Errors.InternalServer
 		}
 		ingredientIDs = append(ingredientIDs, ingredientID)
 	}
 
 	if ingredientIDs == nil {
-		fmt.Println("Error:", constant.Errors.NoRecipesFound.Error())
+		logger.Error.Println(logger.GetCallInfo(), constant.Errors.NoRecipesFound.Error())
 		return nil, constant.Errors.NoRecipesFound
 	}
 
-	fmt.Printf("Info: Successfully returned ingredientIDs: %v\n", ingredientIDs)
+	logger.Info.Printf("%s Successfully returned ingredientIDs: %v", logger.GetCallInfo(), ingredientIDs)
 	return ingredientIDs, nil
 }
 
@@ -103,7 +103,7 @@ func getRecipeIDs(ctx context.Context, ingredientIDs []int64, db *sql.DB) ([]int
 
 	rows, err := db.QueryContext(ctx, linkQuery, args...)
 	if err != nil {
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		return nil, constant.Errors.DbQueryFailure
 	}
 	defer rows.Close()
@@ -115,18 +115,18 @@ func getRecipeIDs(ctx context.Context, ingredientIDs []int64, db *sql.DB) ([]int
 			&recipeID,
 		)
 		if err != nil {
-			fmt.Println("Error:", err.Error())
+			logger.Error.Println(logger.GetCallInfo(), err.Error())
 			return nil, constant.Errors.InternalServer
 		}
 		recipeIDs = append(recipeIDs, recipeID)
 	}
 
 	if len(recipeIDs) == 0 {
-		fmt.Println("Error:", constant.Errors.NoRecipesFound.Error())
+		logger.Error.Println(logger.GetCallInfo(), constant.Errors.NoRecipesFound.Error())
 		return nil, constant.Errors.NoRecipesFound
 	}
 
-	fmt.Printf("Info: Successfully returned recipeIDs: %v\n", recipeIDs)
+	logger.Info.Printf("%s Successfully returned recipeIDs: %v", logger.GetCallInfo(), recipeIDs)
 	return recipeIDs, nil
 }
 
@@ -155,7 +155,7 @@ func getRecipes(ctx context.Context, recipeIDs []int64, season string, db *sql.D
 
 	rows, err := db.QueryContext(ctx, query, args2...)
 	if err != nil {
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		return nil, constant.Errors.DbQueryFailure
 	}
 	defer rows.Close()
@@ -171,13 +171,13 @@ func getRecipes(ctx context.Context, recipeIDs []int64, season string, db *sql.D
 			&recipe.Link,
 		)
 		if err != nil {
-			fmt.Println("Error: ", err.Error())
+			logger.Error.Println(logger.GetCallInfo(), err.Error())
 			return nil, err
 		}
 		recipeList = append(recipeList, &recipe)
 	}
 	if recipeList == nil {
-		fmt.Println("Error:", constant.Errors.NoRecipesFound.Error())
+		logger.Error.Println(logger.GetCallInfo(), constant.Errors.NoRecipesFound.Error())
 		return nil, constant.Errors.NoRecipesFound
 	}
 
@@ -185,6 +185,6 @@ func getRecipes(ctx context.Context, recipeIDs []int64, season string, db *sql.D
 	recipes = &models.Recipes{}
 	recipes.RecipeList = recipeList
 
-	fmt.Printf("Info: Successfully returned %v recipe(s)\n", len(recipes.RecipeList))
+	logger.Info.Printf("%s Successfully returned %v recipe(s)", logger.GetCallInfo(), len(recipes.RecipeList))
 	return recipes, nil
 }

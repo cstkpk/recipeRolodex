@@ -3,10 +3,10 @@ package recipe
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"strings"
 
 	"github.com/cstkpk/recipeRolodex/constant"
+	"github.com/cstkpk/recipeRolodex/logger"
 )
 
 // InsertRecipeDetails is the transaction that handles adding recipe details to the DB
@@ -17,25 +17,25 @@ func InsertRecipeDetails(ctx context.Context, tx *sql.Tx, season, title, author,
 
 	res, err := tx.ExecContext(ctx, query, season, title, author, link)
 	if err != nil {
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		return constant.Errors.DbInsertFailure
 	}
 
 	rows, err := res.RowsAffected()
 	if err != nil {
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		return constant.Errors.DbQueryFailure
 	}
 	if rows != 1 {
 		if rows == 0 {
-			fmt.Println("Error:", constant.Errors.NoRowsAffected)
+			logger.Error.Println(logger.GetCallInfo(), constant.Errors.NoRowsAffected)
 			return constant.Errors.NoRowsAffected
 		}
-		fmt.Println("Error:", constant.Errors.UnexpectedRowsAffected)
+		logger.Error.Println(logger.GetCallInfo(), constant.Errors.UnexpectedRowsAffected.Error())
 		return constant.Errors.UnexpectedRowsAffected
 	}
 
-	fmt.Println("Info: Successfully inserted recipe into database")
+	logger.Info.Println(logger.GetCallInfo(), "Successfully inserted recipe into database")
 	return nil
 }
 
@@ -61,7 +61,7 @@ func InsertIngredients(ctx context.Context, tx *sql.Tx, ingredientList []string)
 
 	rows, err := tx.QueryContext(ctx, query1, args1...)
 	if err != nil {
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		return constant.Errors.DbQueryFailure
 	}
 	defer rows.Close()
@@ -73,7 +73,7 @@ func InsertIngredients(ctx context.Context, tx *sql.Tx, ingredientList []string)
 			&ingredient,
 		)
 		if err != nil {
-			fmt.Println("Error:", err.Error())
+			logger.Error.Println(logger.GetCallInfo(), err.Error())
 			return constant.Errors.InternalServer
 		}
 		ingredients = append(ingredients, ingredient)
@@ -94,7 +94,7 @@ func InsertIngredients(ctx context.Context, tx *sql.Tx, ingredientList []string)
 
 	// If there are no new ingredients to insert, return
 	if len(ingToAdd) == 0 {
-		fmt.Println("Info: no new ingredients to insert")
+		logger.Info.Println(logger.GetCallInfo(), "No new ingredients to insert")
 		return nil
 	}
 
@@ -114,11 +114,11 @@ func InsertIngredients(ctx context.Context, tx *sql.Tx, ingredientList []string)
 
 	_, err = tx.ExecContext(ctx, query, args...)
 	if err != nil {
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		return constant.Errors.DbInsertFailure
 	}
 
-	fmt.Printf("Info: Successfully inserted %v ingredients\n", len(ingToAdd))
+	logger.Info.Printf("%s Successfully inserted %v ingredients", logger.GetCallInfo(), len(ingToAdd))
 	return nil
 }
 
@@ -131,7 +131,7 @@ func InsertLink(ctx context.Context, tx *sql.Tx, recipeTitle string, ingredients
 	var recipeID int64
 	err := tx.QueryRowContext(ctx, queryRecipe, recipeTitle).Scan(&recipeID)
 	if err != nil {
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		return constant.Errors.DbQueryFailure
 	}
 
@@ -147,7 +147,7 @@ func InsertLink(ctx context.Context, tx *sql.Tx, recipeTitle string, ingredients
 	}
 	rows, err := tx.QueryContext(ctx, queryIngredients, args...)
 	if err != nil {
-		fmt.Println("Error:", err.Error())
+		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		return constant.Errors.DbQueryFailure
 	}
 	defer rows.Close()
@@ -157,7 +157,7 @@ func InsertLink(ctx context.Context, tx *sql.Tx, recipeTitle string, ingredients
 	for rows.Next() {
 		err = rows.Scan(&ingredientID)
 		if err != nil {
-			fmt.Println("Error:", err.Error())
+			logger.Error.Println(logger.GetCallInfo(), err.Error())
 			return constant.Errors.DbQueryFailure
 		}
 		ingredientIDs = append(ingredientIDs, ingredientID)
@@ -170,24 +170,24 @@ func InsertLink(ctx context.Context, tx *sql.Tx, recipeTitle string, ingredients
 	for _, ing := range ingredientIDs {
 		res, err := tx.ExecContext(ctx, queryLink, recipeID, ing)
 		if err != nil {
-			fmt.Println("Error:", err.Error())
+			logger.Error.Println(logger.GetCallInfo(), err.Error())
 			return constant.Errors.DbInsertFailure
 		}
 		rows, err := res.RowsAffected()
 		if err != nil {
-			fmt.Println("Error:", err.Error())
+			logger.Error.Println(logger.GetCallInfo(), err.Error())
 			return constant.Errors.DbQueryFailure
 		}
 		if rows != 1 {
 			if rows == 0 {
-				fmt.Println("Error:", constant.Errors.NoRowsAffected.Error())
+				logger.Error.Println(logger.GetCallInfo(), constant.Errors.NoRowsAffected.Error())
 				return constant.Errors.NoRowsAffected
 			}
-			fmt.Println("Error:", constant.Errors.UnexpectedRowsAffected.Error())
+			logger.Error.Println(logger.GetCallInfo(), constant.Errors.UnexpectedRowsAffected.Error())
 			return constant.Errors.UnexpectedRowsAffected
 		}
 	}
 
-	fmt.Printf("Info: Inserted link rows for ingredients with IDs %v for recipe with ID %v \n", ingredientIDs, recipeID)
+	logger.Info.Printf("%s Inserted link rows for ingredients with IDs %v for recipe with ID %v", logger.GetCallInfo(), ingredientIDs, recipeID)
 	return nil
 }
