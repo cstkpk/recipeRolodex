@@ -54,8 +54,7 @@ func getIngredientIDs(ctx context.Context, ing1, ing2, ing3 string, db *sql.DB) 
 	ingredientQuery := `SELECT id FROM ` + constant.RR.Ingredients +
 		` WHERE (name LIKE ? OR name LIKE ? OR name LIKE ?)`
 
-	logger.Info.Println(ingredientQuery)
-	rows, err := db.QueryContext(ctx, ingredientQuery, ing1+"%", ing2+"%", ing3+"%")
+	rows, err := db.QueryContext(ctx, ingredientQuery, "%"+ing1+"%", "%"+ing2+"%", "%"+ing3+"%")
 	if err != nil {
 		logger.Error.Println(logger.GetCallInfo(), err.Error())
 		return nil, constant.Errors.DbQueryFailure
