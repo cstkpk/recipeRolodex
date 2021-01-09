@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-// import '@styles/main.scss';
+import '../global/sass/main.scss';
 
 import App from './routes';
 
