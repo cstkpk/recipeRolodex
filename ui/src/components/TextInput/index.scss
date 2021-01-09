@@ -1,0 +1,43 @@
+@import "../../../global/sass/variables";
+
+.container {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  position: inline-block;
+  width: 100%;
+}
+
+.label {
+  color: $colorGreyDark2;
+  display: block;
+  font-family: "Yusei Magic", sans-serif;
+  font-size: $fsDefault;
+  margin-bottom: 0.4rem;
+}
+
+.input {
+  background-color: white;
+  border: 1px solid $colorGreyDark1;
+  border-radius: 0.8rem;
+  box-sizing: border-box;
+  color: $colorGreyDark2;
+  font-family: "Yusei Magic", sans-serif;
+  font-size: $fsDefault;
+  height: 4rem;
+  line-height: 1.5rem;
+  padding: 0.5rem 3.5rem 0.5rem 1rem;
+  transition: border-color 0.2s ease-in-out;
+  width: 100%;
+
+  &:focus {
+    border-color: $colorYellow;
+    outline: 0;
+  }
+}
+
+.error {
+  color: $colorRed;
+  font-size: $fsSmall2;
+  margin-left: 0.5rem;
+  margin-top: 0.5rem;
+}

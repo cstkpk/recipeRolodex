@@ -1,0 +1,36 @@
+@import "../../../global/sass/variables";
+
+.selectContainer {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  position: inline-block;
+  width: 100%;
+}
+
+.label {
+  color: $colorGreyDark2;
+  display: block;
+  font-family: "Yusei Magic", sans-serif;
+  font-size: $fsDefault;
+  margin-bottom: 0.4rem;
+}
+
+.select {
+  border: 1px solid $colorGreyDark1;
+  border-radius: 0.8rem;
+  color: $colorGreyDark2;
+  font-family: "Yusei Magic", sans-serif;
+  font-size: $fsDefault;
+  height: 4rem;
+  outline: none;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  text-align: center;
+  transition: border-color 0.2s ease-in-out;
+  width: 100%;
+
+  &:focus,
+  &:active {
+    border-color: $colorYellow;
+  }
+}
