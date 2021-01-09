@@ -30,6 +30,7 @@ module.exports = {
   devServer: {
     contentBase: resolveAppPath('public'),
     compress: true,
+    historyApiFallback: true,
     hot: true,
     host,
     port: 3000,
@@ -67,7 +68,7 @@ module.exports = {
             loader: 'css-loader',
             options: {
               importLoaders: 2,
-              localsConvention: 'asIs',
+              // localsConvention: 'asIs', // no longer supported?
               modules: true,
               sourceMap: true,
             },
@@ -75,7 +76,9 @@ module.exports = {
           {
             loader: 'postcss-loader',
             options: {
-              plugins: [autoprefixer({grid: 'no-autoplace'})],
+              postcssOptions: {
+                plugins: [autoprefixer({grid: 'no-autoplace'})],
+              }
             },
           },
           {
