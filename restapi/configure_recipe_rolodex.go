@@ -9,6 +9,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
+	"github.com/rs/cors"
 
 	"github.com/cstkpk/recipeRolodex/restapi/operations"
 	"github.com/cstkpk/recipeRolodex/restapi/operations/ready"
@@ -84,5 +85,14 @@ func setupMiddlewares(handler http.Handler) http.Handler {
 // The middleware configuration happens before anything, this middleware also applies to serving the swagger.json document.
 // So this is a good place to plug in a panic handling middleware, logging and metrics
 func setupGlobalMiddleware(handler http.Handler) http.Handler {
+	enableCors := cors.New(cors.Options{
+		AllowedHeaders:   []string{"*"},
+		AllowedOrigins:   []string{"http://127.0.0.1:*", "http://localhost:*", "http://0.0.0.0:*"},
+		AllowedMethods:   []string{"GET", "PUT", "POST", "OPTIONS", "DELETE"},
+		AllowCredentials: true,
+		Debug:            false,
+	})
+	handler = enableCors.Handler(handler)
+
 	return handler
 }
