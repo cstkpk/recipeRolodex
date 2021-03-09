@@ -1,7 +1,8 @@
 import {combineReducers} from 'redux';
+import {reducer as searchRecipes} from './searchRecipes/index';
 
 const rootReducer = combineReducers({
-  // add reducers here
+  searchRecipes,
 });
 
 export default rootReducer;

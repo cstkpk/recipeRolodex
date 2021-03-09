@@ -1,8 +1,9 @@
 import {all} from 'redux-saga/effects';
+import searchRecipes from './searchRecipes';
 
 function* rootSaga() {
   yield all([
-    // add sagas here
+    searchRecipes.sagas.default(),
   ]);
 };
 
